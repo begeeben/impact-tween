@@ -32,8 +32,8 @@ ig.Entity.prototype.update = function() {
 	}
 };
 
-ig.Entity.prototype.tween = function(props, duration, settings) {
-	var tween = new ig.Tween(this, props, duration, settings);
+ig.Entity.prototype.tween = function(props, duration, settings, fromProps) {
+	var tween = new ig.Tween(this, props, duration, settings, fromProps);
 	this.tweens.push(tween);
 	return tween;
 };
@@ -56,7 +56,7 @@ ig.Entity.prototype.stopTweens = function(doComplete) {
 	}
 };
 
-ig.Tween = function(obj, properties, duration, settings) {
+ig.Tween = function(obj, properties, duration, settings, fromProps) {
 	var _object = obj;
 	var valuesStart = {};
 	var valuesEnd = {};
@@ -65,6 +65,7 @@ ig.Tween = function(obj, properties, duration, settings) {
 	var timer = false;
 	var started = false;
 	var _props = properties;
+	var _fromProps = fromProps;
 	var _chained = false;
 	this.duration = duration;
 	this.complete = false;
@@ -104,6 +105,9 @@ ig.Tween = function(obj, properties, duration, settings) {
 	};
 
 	this.start = function() {
+		if (_fromProps) {
+			ig.merge(_object, _fromProps);
+		}
 		this.complete = false;
 		this.paused = false;
 		this.loopNum = this.loopCount;
