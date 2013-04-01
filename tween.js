@@ -72,6 +72,10 @@ ig.Tween = function(obj, properties, duration, settings, fromProps) {
 	this.paused = false;
 	this.easing = ig.Tween.Easing.Linear.EaseNone;
 	this.onComplete = false;
+
+	// The event callback triggered when delayed tween starts.
+	this.onStart = false;
+
 	this.delay = 0;
 	this.loop = 0;
 	this.loopCount = -1;
@@ -166,6 +170,7 @@ ig.Tween = function(obj, properties, duration, settings, fromProps) {
 			if ( timer.delta() < this.delay ) return;
 			this.delay = 0;
 			timer.reset();
+			if (this.onStart) this.onStart();
 		}
 		if ( this.paused || this.complete ) return false;
 
@@ -226,6 +231,7 @@ ig.Tween = function(obj, properties, duration, settings, fromProps) {
 		}
 		this.complete = true;
 	}
+
 };
 
 ig.Tween.Loop = { Revert: 1, Reverse: 2 };
